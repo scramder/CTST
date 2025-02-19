@@ -9,6 +9,15 @@
     <section class="home">
         <h1> Bienvenido </h1>
         <h2> Control de Taller y Soporte técnico</h2>
+        <form action="auth/verificar_rol.php" method="post">
+            <label for="nombre_usuario">Nombre de Usuario:</label>
+            <input type="text" id="nombre_usuario" name="nombre_usuario" required>
+            <br>
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" required>
+            <br>
+            <input type="submit" value="Iniciar Sesión">
+        </form>
     </section>
 </body>
 </html>

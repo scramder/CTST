@@ -1,0 +1,58 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.trabajos {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.trabajo {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px;
+    width: calc(33.333% - 20px);
+    box-sizing: border-box;
+}
+
+.trabajo-id,
+.trabajo-descripcion,
+.trabajo-estado,
+.trabajo-cliente {
+    margin-bottom: 5px;
+}
+
+.no-trabajos {
+    margin: 10px;
+    font-weight: bold;
+}
+
+h1 {
+    color: #333;
+}
+
+h2 {
+    margin-top: 20px;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul li {
+    margin-bottom: 10px;
+}
+
+ul li a {
+    text-decoration: none;
+    color: #007BFF;
+}
+
+ul li a:hover {
+    text-decoration: underline;
+}
