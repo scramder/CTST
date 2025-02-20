@@ -53,6 +53,17 @@
         .btn:hover {
             background-color: #0056b3;
         }
+        .profile-pic {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+        .profile-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
     </style>
     <script>
         function confirmDelete(userId) {
@@ -92,6 +103,7 @@
         <!-- Listado de usuarios -->
         <table class="usuarios">
             <tr>
+                <th>Foto</th>
                 <th>Nombre de Usuario</th>
                 <th>Rol</th>
                 <th>Nombres</th>
@@ -125,6 +137,7 @@
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
                     echo '<tr>';
+                    echo '<td><div class="profile-pic"><img src="../../' . ($row['imagen_usuario'] ? $row['imagen_usuario'] : 'images/default-profile.png') . '" alt="Foto de Perfil"></div></td>';
                     echo '<td>' . $row['nombre_usuario'] . '</td>';
                     echo '<td>' . $row['rol'] . '</td>';
                     echo '<td>' . $row['nombres'] . '</td>';
@@ -138,7 +151,7 @@
                     echo '</tr>';
                 }
             } else {
-                echo '<tr><td colspan="6" class="no-usuarios">No hay usuarios</td></tr>';
+                echo '<tr><td colspan="7" class="no-usuarios">No hay usuarios</td></tr>';
             }
 
             $conn->close();

@@ -5,6 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ver Usuario</title>
     <link rel="stylesheet" href="../../css/styles.css">
+    <style>
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            border: 2px solid #dee2e6;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .profile-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
 </head>
 <body>
     <?php
@@ -30,7 +45,9 @@
 
     if ($result->num_rows > 0) {
         $usuario = $result->fetch_assoc();
+
         echo "<h1>Detalles del Usuario</h1>";
+        echo '<div class="profile-pic"><img src="../../' . ($usuario['imagen_usuario'] ? $usuario['imagen_usuario'] : 'images/default-profile.png') . '" alt="Foto de Perfil"></div>';
         echo "<p><strong>Nombre de Usuario:</strong> " . $usuario['nombre_usuario'] . "</p>";
         echo "<p><strong>Rol:</strong> " . $usuario['rol'] . "</p>";
         echo "<p><strong>Nombres:</strong> " . $usuario['nombres'] . "</p>";
