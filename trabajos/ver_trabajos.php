@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Administrador</title>
+    <title>Ver Trabajos</title>
     <link rel="stylesheet" href="../css/styles.css">
     <style>
         body {
@@ -11,24 +11,13 @@
             flex-direction: column;
             align-items: center;
             font-family: Arial, sans-serif;
-            justify-content: flex-start;
         }
         .header {
             width: 100%;
-            background-color: rgb(45, 46, 46);
+            background-color: #f8f9fa;
             padding: 10px;
             text-align: center;
             border-bottom: 1px solid #dee2e6;
-            font-size: 2em;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-        }
-        .header .welcome {
-            color: #fff;
-        }
-        .header .datetime {
-            color: #fff;
         }
         .content {
             width: 80%;
@@ -44,7 +33,7 @@
             text-align: left;
         }
         .trabajos th {
-            background-color:rgb(26, 27, 27);
+            background-color: #f8f9fa;
         }
         .no-trabajos {
             text-align: center;
@@ -59,19 +48,6 @@
             text-decoration: none;
             color: #007bff;
         }
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            margin: 10px 0;
-            font-size: 1em;
-            color: #fff;
-            background-color: #007bff;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-        .btn:hover {
-            background-color: #0056b3;
-        }
     </style>
 </head>
 <body>
@@ -85,16 +61,15 @@
             exit;
         }
 
-        echo '<div class="welcome">Bienvenido, ' . $_SESSION['nombre_usuario'] . '</div>';
-        echo '<div class="datetime">' . date('d-m-Y H:i:s') . '</div>';
+        echo "Bienvenido, " . $_SESSION['nombre_usuario'];
         ?>
     </div>
 
     <div class="content">
-        <h1>Panel de Administrador</h1>
+        <h1>Lista de Trabajos</h1>
 
         <!-- Filtros -->
-        <form method="GET" action="administrador.php">
+        <form method="GET" action="ver_trabajos.php">
             Filtrar por estado: 
             <select name="estado">
                 <option value="">Todos</option>
@@ -124,6 +99,11 @@
             <?php
             include '../connect/db_connect.php';
 
+            // Paginación
+            $limit = 10; // Número de trabajos por página
+            $page = isset($_GET['page']) ? $_GET['page'] : 1;
+            $offset = ($page - 1) * $limit;
+
             // Obtener los trabajos de la base de datos
             $sql = "SELECT t.id, t.codigo_trabajo, t.estado, c.nombres, c.apellido, d.marca, d.modelo
                     FROM trabajos t
@@ -133,7 +113,14 @@
                 $estado = $_GET['estado'];
                 $sql .= " WHERE t.estado = '$estado'";
             }
+            $sql .= " LIMIT $limit OFFSET $offset";
             $result = $conn->query($sql);
+
+            // Contar el número total de trabajos para la paginación
+            $sql_count = "SELECT COUNT(*) AS total FROM trabajos";
+            $result_count = $conn->query($sql_count);
+            $total_trabajos = $result_count->fetch_assoc()['total'];
+            $total_pages = ceil($total_trabajos / $limit);
 
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
@@ -151,7 +138,7 @@
                     echo '</tr>';
                 }
             } else {
-                echo '<tr><td colspan="6" class="no-trabajos">No hay trabajos</td>';
+                echo '<tr><td colspan="6" class="no-trabajos">No hay trabajos</td></tr>';
             }
             ?>
         </table>
@@ -159,14 +146,8 @@
         <!-- Paginación -->
         <div class="pagination">
             <?php
-            // Contar el número total de trabajos para la paginación
-            $sql_count = "SELECT COUNT(*) AS total FROM trabajos";
-            $result_count = $conn->query($sql_count);
-            $total_trabajos = $result_count->fetch_assoc()['total'];
-            $total_pages = ceil($total_trabajos / 10); // Número de trabajos por página
-
             for ($i = 1; $i <= $total_pages; $i++) {
-                echo '<a href="administrador.php?page=' . $i . '">' . $i . '</a> ';
+                echo '<a href="ver_trabajos.php?page=' . $i . '">' . $i . '</a> ';
             }
             ?>
         </div>
@@ -174,14 +155,6 @@
         <?php
         $conn->close();
         ?>
-    </div>
-
-    <div class="content">
-        <h2>Opciones</h2>
-        <a href="clientes/agregar_cliente.php" class="btn">Crear Nuevo Trabajo</a>
-        <a href="usuarios/ver_usuarios.php" class="btn">Ver Usuarios</a>
-        <a href="clientes/ver_clientes.php" class="btn">Ver Clientes</a>
-        <a href="../trabajos/ver_trabajos.php" class="btn">Ver Trabajos</a>
     </div>
 </body>
 </html>

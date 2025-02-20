@@ -1,5 +1,55 @@
 body {
     font-family: Arial, sans-serif;
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.home {
+    text-align: center;
+    background-color: #34495e;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+h1, h2 {
+    margin: 0 0 20px;
+}
+
+form {
+    margin-top: 20px;
+}
+
+form label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+form input[type="text"],
+form input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 5px;
+}
+
+form input[type="submit"] {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #2980b9;
+    color: #ecf0f1;
+    cursor: pointer;
+}
+
+form input[type="submit"]:hover {
+    background-color: #3498db;
 }
 
 .trabajos {
@@ -27,18 +77,6 @@ body {
     font-weight: bold;
 }
 
-h1 {
-    color: #333;
-}
-
-h2 {
-    margin-top: 20px;
-}
-
-form {
-    margin-bottom: 20px;
-}
-
 ul {
     list-style-type: none;
     padding: 0;
@@ -55,4 +93,51 @@ ul li a {
 
 ul li a:hover {
     text-decoration: underline;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+table th, table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+
+table th {
+    background-color: #34495e;
+    color: #ecf0f1;
+}
+
+table td {
+    background-color: #ecf0f1;
+    color: #2c3e50;
+}
+
+table td img {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+.pagination {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.pagination a {
+    color: #2980b9;
+    text-decoration: none;
+    margin: 0 5px;
+    padding: 5px 10px;
+    border: 1px solid #2980b9;
+    border-radius: 5px;
+}
+
+.pagination a:hover {
+    background-color: #2980b9;
+    color: #ecf0f1;
 }
