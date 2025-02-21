@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,18 +7,26 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <section class="home">
-        <h1> Bienvenido </h1>
-        <h2> Control de Taller y Soporte técnico</h2>
-        <form action="auth/verificar_rol.php" method="post">
-            <label for="nombre_usuario">Nombre de Usuario:</label>
-            <input type="text" id="nombre_usuario" name="nombre_usuario" required>
+    <section class="home-page">
+        <h1 class="home-title">Bienvenido</h1>
+        <h2 class="home-subtitle">Control de Taller y Soporte Técnico</h2>
+        <form class="home-form" action="auth/verificar_rol.php" method="post">
+            <label class="home-label" for="nombre_usuario">Nombre de Usuario:</label>
+            <input class="text" type="text" id="nombre_usuario" name="nombre_usuario" required>
             <br>
-            <label for="password">Contraseña:</label>
-            <input type="password" id="password" name="password" required>
+            <label class="home-label" for="password">Contraseña:</label>
+            <input class="pass" type="password" id="password" name="password" required>
             <br>
-            <input type="submit" value="Iniciar Sesión">
+            <input class="summit" type="submit" value="Iniciar Sesión">
         </form>
     </section>
+
+    <script>
+        // Mostrar alert si el parámetro error está presente en la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('error')) {
+            alert('Nombre de usuario y/o contraseña incorrectos.');
+        }
+    </script>
 </body>
 </html>

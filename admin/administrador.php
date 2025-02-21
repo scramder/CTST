@@ -5,88 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administrador</title>
     <link rel="stylesheet" href="../css/styles.css">
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-family: Arial, sans-serif;
-        }
-        .header {
-            width: 100%;
-            background-color: rgb(45, 46, 46);
-            padding: 10px;
-            text-align: center;
-            border-bottom: 1px solid #dee2e6;
-            font-size: 2em;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .header .welcome {
-            color: #fff;
-            display: flex;
-            align-items: center;
-        }
-        .header .datetime {
-            color: #fff;
-        }
-        .header .profile-pic {
-            width: 50px;
-            height: 50px;
-            border: 2px solid #fff;
-            border-radius: 50%;
-            overflow: hidden;
-            margin-right: 10px;
-        }
-        .header .profile-pic img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .content {
-            width: 80%;
-            margin: 20px 0;
-        }
-        .trabajos {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .trabajos th, .trabajos td {
-            border: 1px solid #dee2e6;
-            padding: 8px;
-            text-align: left;
-        }
-        .trabajos th {
-            background-color: rgb(26, 27, 27);
-        }
-        .no-trabajos {
-            text-align: center;
-            font-size: 1.2em;
-            color: #6c757d;
-        }
-        .pagination {
-            margin-top: 20px;
-        }
-        .pagination a {
-            margin: 0 5px;
-            text-decoration: none;
-            color: #007bff;
-        }
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            margin: 10px 0;
-            font-size: 1em;
-            color: #fff;
-            background-color: #007bff;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-        .btn:hover {
-            background-color: #0056b3;
-        }
-    </style>
 </head>
 <body>
     <div class="header">
@@ -101,29 +19,32 @@
 
         include '../connect/db_connect.php';
 
-// Verificar si el nombre de usuario está presente en la sesión
-if (!isset($_SESSION['nombre_usuario'])) {
-    echo "Nombre de usuario no encontrado en la sesión";
-    exit;
-}
+        // Verificar si el nombre de usuario está presente en la sesión
+        if (!isset($_SESSION['nombre_usuario'])) {
+            echo "Nombre de usuario no encontrado en la sesión";
+            exit;
+        }
 
-// Obtener la ruta de la imagen de perfil del usuario activo
-$nombre_usuario = $_SESSION['nombre_usuario'];
-$sql = "SELECT imagen_usuario FROM usuarios WHERE nombre_usuario = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $nombre_usuario);
-$stmt->execute();
-$result = $stmt->get_result();
-$usuario = $result->fetch_assoc();
-$foto_perfil = $usuario['imagen_usuario'] ? $usuario['imagen_usuario'] : 'images/default-profile.png';
-$stmt->close();
+        // Obtener la ruta de la imagen de perfil del usuario activo
+        $nombre_usuario = $_SESSION['nombre_usuario'];
+        $sql = "SELECT imagen_usuario FROM usuarios WHERE nombre_usuario = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $nombre_usuario);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $usuario = $result->fetch_assoc();
+        $foto_perfil = $usuario['imagen_usuario'] ? $usuario['imagen_usuario'] : 'images/default-profile.png';
+        $stmt->close();
 
-echo '<div class="welcome">';
-echo '<div class="profile-pic"><img src="../' . $foto_perfil . '" alt="Profile Picture" id="profileImage"></div>';
+        echo '<div class="welcome">';
+        echo '<div class="profile-pic"><img src="../' . $foto_perfil . '" alt="Profile Picture" id="profileImage"></div>';
         echo 'Bienvenido, ' . $_SESSION['nombre_usuario'];
         echo '</div>';
-        echo '<div class="datetime">' . date('d-m-Y H:i:s') . '</div>';
+        echo '<div class="datetime" id="datetime"></div>';
         ?>
+        <form method="POST" action="logout.php" style="display: inline;">
+            <button type="submit" class="btn">Cerrar Sesión</button>
+        </form>
     </div>
 
     <div class="content">
@@ -217,5 +138,16 @@ echo '<div class="profile-pic"><img src="../' . $foto_perfil . '" alt="Profile P
         <a href="clientes/ver_clientes.php" class="btn">Ver Clientes</a>
         <a href="trabajos/ver_trabajos.php" class="btn">Ver Trabajos</a>
     </div>
+
+    <script>
+        function updateTime() {
+            const now = new Date();
+            const datetimeElement = document.getElementById('datetime');
+            datetimeElement.textContent = now.toLocaleString();
+        }
+
+        setInterval(updateTime, 1000);
+        updateTime(); // Llamar inmediatamente para mostrar la hora sin esperar 1 segundo
+    </script>
 </body>
 </html>
