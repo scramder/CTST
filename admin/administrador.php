@@ -1,24 +1,135 @@
+<?php
+session_start();
+
+// Verificar si el usuario tiene el rol adecuado
+if (!isset($_SESSION['rol']) || $_SESSION['rol'] != 'administrador') {
+    echo "Acceso denegado";
+    exit;
+}
+
+include '../connect/db_connect.php';
+
+// Obtener los trabajos de la base de datos
+$sql = "SELECT t.id, t.codigo_trabajo, t.estado, t.fecha_ingreso, u.nombre_usuario AS tecnico_asignado,
+        c.nombres, c.apellido, d.marca, d.modelo
+        FROM trabajos t
+        LEFT JOIN usuarios u ON t.tecnico_asignado = u.id
+        LEFT JOIN dispositivos d ON t.dispositivo_id = d.id
+        LEFT JOIN clientes c ON d.cliente_id = c.id";
+if (isset($_GET['estado']) && $_GET['estado'] != '') {
+    $estado = $_GET['estado'];
+    $sql .= " WHERE t.estado = '$estado'";
+}
+$result = $conn->query($sql);
+
+// Obtener los IDs de los trabajos para la navegación
+$trabajos_ids = [];
+if ($result->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
+        $trabajos_ids[] = $row['id'];
+    }
+}
+?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administrador</title>
     <link rel="stylesheet" href="../css/styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var trabajosIds = <?php echo json_encode($trabajos_ids); ?>;
+            var currentIndex = -1;
+
+            function loadTrabajo(trabajoId) {
+                $.ajax({
+                    url: "ver_trabajo_overlay.php",
+                    method: "GET",
+                    data: { id: trabajoId },
+                    success: function(data) {
+                        $("#overlay-content").html(data);
+                        $("#overlay").show();
+                    }
+                });
+            }
+
+            $(".ver-trabajo").on("click", function() {
+                var trabajoId = $(this).data("id");
+                currentIndex = trabajosIds.indexOf(trabajoId);
+                loadTrabajo(trabajoId);
+            });
+
+            $("#overlay").on("click", "#overlay-close", function() {
+                $("#overlay").hide();
+            });
+
+            $("#overlay").on("click", "#overlay-prev", function() {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    loadTrabajo(trabajosIds[currentIndex]);
+                }
+            });
+
+            $("#overlay").on("click", "#overlay-next", function() {
+                if (currentIndex < trabajosIds.length - 1) {
+                    currentIndex++;
+                    loadTrabajo(trabajosIds[currentIndex]);
+                }
+            });
+
+            // Ocultar el overlay al cargar la página
+            $("#overlay").hide();
+        });
+    </script>
+    <style>
+        /* Estilos para el overlay */
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #overlay-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 800px;
+            color: #000;
+            position: relative;
+        }
+
+        #overlay-close, #overlay-prev, #overlay-next {
+            display: inline-block;
+            margin: 20px 10px 0;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        #overlay-close:hover, #overlay-prev:hover, #overlay-next:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
     <div class="header">
         <?php
-        session_start();
-
-        // Verificar si el usuario tiene el rol de administrador
-        if (!isset($_SESSION['rol']) || $_SESSION['rol'] != 'administrador') {
-            echo "Acceso denegado";
-            exit;
-        }
-
-        include '../connect/db_connect.php';
-
         // Verificar si el nombre de usuario está presente en la sesión
         if (!isset($_SESSION['nombre_usuario'])) {
             echo "Nombre de usuario no encontrado en la sesión";
@@ -80,10 +191,12 @@
             </tr>
             <?php
             // Obtener los trabajos de la base de datos
-            $sql = "SELECT t.id, t.codigo_trabajo, t.estado, c.nombres, c.apellido, d.marca, d.modelo
+            $sql = "SELECT t.id, t.codigo_trabajo, t.estado, t.fecha_ingreso, u.nombre_usuario AS tecnico_asignado,
+                    c.nombres, c.apellido, d.marca, d.modelo
                     FROM trabajos t
-                    JOIN dispositivos d ON t.dispositivo_id = d.id
-                    JOIN clientes c ON d.cliente_id = c.id";
+                    LEFT JOIN usuarios u ON t.tecnico_asignado = u.id
+                    LEFT JOIN dispositivos d ON t.dispositivo_id = d.id
+                    LEFT JOIN clientes c ON d.cliente_id = c.id";
             if (isset($_GET['estado']) && $_GET['estado'] != '') {
                 $estado = $_GET['estado'];
                 $sql .= " WHERE t.estado = '$estado'";
@@ -99,8 +212,8 @@
                     echo '<td>' . $row['nombres'] . ' ' . $row['apellido'] . '</td>';
                     echo '<td>' . $row['marca'] . ' ' . $row['modelo'] . '</td>';
                     echo '<td>';
-                    echo '<a href="ver_trabajo.php?id=' . $row['id'] . '"><img src="../icons/view.png" alt="Ver"></a>';
-                    echo '<a href="modificar_trabajo.php?id=' . $row['id'] . '"><img src="../icons/edit.png" alt="Modificar"></a>';
+                    echo '<button class="ver-trabajo" data-id="' . $row['id'] . '">Ver</button>';
+                    echo '<a href="../trabajos/modificar_trabajo.php?id=' . $row['id'] . '"><img src="../icons/edit.png" alt="Modificar"></a>';
                     echo '<a href="javascript:void(0);" onclick="confirmDelete(' . $row['id'] . ')"><img src="../icons/delete.png" alt="Borrar"></a>';
                     echo '</td>';
                     echo '</tr>';
@@ -136,7 +249,13 @@
         <a href="clientes/agregar_cliente.php" class="btn">Crear Nuevo Trabajo</a>
         <a href="usuarios/ver_usuarios.php" class="btn">Ver Usuarios</a>
         <a href="clientes/ver_clientes.php" class="btn">Ver Clientes</a>
-        <a href="trabajos/ver_trabajos.php" class="btn">Ver Trabajos</a>
+        <a href="../trabajos/ver_trabajos.php" class="btn">Ver Trabajos</a>
+    </div>
+
+    <!-- Overlay -->
+    <div id="overlay">
+        <div id="overlay-content"></div>
+
     </div>
 
     <script>

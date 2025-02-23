@@ -5,66 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Administrar Usuarios</title>
     <link rel="stylesheet" href="../../css/styles.css">
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-family: Arial, sans-serif;
-        }
-        .header {
-            width: 100%;
-            background-color: #f8f9fa;
-            padding: 10px;
-            text-align: center;
-            border-bottom: 1px solid #dee2e6;
-        }
-        .content {
-            width: 80%;
-            margin: 20px 0;
-        }
-        .usuarios {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .usuarios th, .usuarios td {
-            border: 1px solid #dee2e6;
-            padding: 8px;
-            text-align: left;
-        }
-        .usuarios th {
-            background-color: #f8f9fa;
-        }
-        .no-usuarios {
-            text-align: center;
-            font-size: 1.2em;
-            color: #6c757d;
-        }
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            margin: 10px 0;
-            font-size: 1em;
-            color: #fff;
-            background-color: #007bff;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-        .btn:hover {
-            background-color: #0056b3;
-        }
-        .profile-pic {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            overflow: hidden;
-        }
-        .profile-pic img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-    </style>
     <script>
         function confirmDelete(userId) {
             if (confirm("¿Estás seguro de que deseas borrar este usuario?")) {
@@ -95,10 +35,7 @@
     <div class="content">
         <h1>Administrar Usuarios</h1>
 
-        <!-- Botón para agregar un nuevo usuario -->
-        <a href="agregar_usuario.php" class="btn">Agregar Usuario</a>
-        <!-- Botón para volver al panel del administrador -->
-        <a href="../administrador.php" class="btn">Volver al Panel de Administrador</a>
+
 
         <!-- Listado de usuarios -->
         <table class="usuarios">
@@ -157,6 +94,10 @@
             $conn->close();
             ?>
         </table>
+                <!-- Botón para agregar un nuevo usuario -->
+                <a href="agregar_usuario.php" class="btn">Agregar Usuario</a>
+        <!-- Botón para volver al panel del administrador -->
+        <a href="../administrador.php" class="btn">Volver al Panel de Administrador</a>
     </div>
 </body>
 </html>

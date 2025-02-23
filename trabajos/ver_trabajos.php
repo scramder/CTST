@@ -5,50 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ver Trabajos</title>
     <link rel="stylesheet" href="../css/styles.css">
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-family: Arial, sans-serif;
+    
+    <script>
+        function confirmDelete(trabajoId) {
+            if (confirm("¿Estás seguro de que deseas eliminar este trabajo?")) {
+                window.location.href = "borrar_trabajo.php?id=" + trabajoId;
+            }
         }
-        .header {
-            width: 100%;
-            background-color: #f8f9fa;
-            padding: 10px;
-            text-align: center;
-            border-bottom: 1px solid #dee2e6;
-        }
-        .content {
-            width: 80%;
-            margin: 20px 0;
-        }
-        .trabajos {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .trabajos th, .trabajos td {
-            border: 1px solid #dee2e6;
-            padding: 8px;
-            text-align: left;
-        }
-        .trabajos th {
-            background-color: #f8f9fa;
-        }
-        .no-trabajos {
-            text-align: center;
-            font-size: 1.2em;
-            color: #6c757d;
-        }
-        .pagination {
-            margin-top: 20px;
-        }
-        .pagination a {
-            margin: 0 5px;
-            text-decoration: none;
-            color: #007bff;
-        }
-    </style>
+    </script>
 </head>
 <body>
     <div class="header">
@@ -150,6 +114,12 @@
                 echo '<a href="ver_trabajos.php?page=' . $i . '">' . $i . '</a> ';
             }
             ?>
+        </div>
+
+        <!-- Botones para crear nuevo trabajo y volver al panel de administrador -->
+        <div class="actions">
+            <a href="nuevo_trabajo.php" class="btn">Crear Nuevo Trabajo</a>
+            <a href="../admin/administrador.php" class="btn">Volver al Panel de Administrador</a>
         </div>
 
         <?php

@@ -98,7 +98,7 @@ body {
     background-color: #0056b3;
 }
 
-.home-page{
+.home-page {
     text-align: center;
     background-color: #34495e;
     padding: 40px;
@@ -146,7 +146,75 @@ body {
     cursor: pointer;
 }
 
-.summit :hover {
+.summit:hover {
     background-color: #c0392b;
 }
-    
+
+.usuarios {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.usuarios th, .usuarios td {
+    border: 1px solid #dee2e6;
+    padding: 8px;
+    text-align: left;
+}
+
+.usuarios th {
+    background-color: rgb(45, 46, 46);
+}
+
+.no-usuarios {
+    text-align: center;
+    font-size: 1.2em;
+    color: #6c757d;
+}
+
+.profile-pic {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.profile-pic img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Estilos para ver_clientes.php */
+.clientes {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.clientes-header, .clientes-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.clientes-header {
+    background-color: rgb(26, 27, 27);
+    font-weight: bold;
+}
+
+.clientes-col {
+    flex: 1;
+    text-align: left;
+}
+
+.clientes-col.acciones {
+    display: flex;
+    justify-content: space-around;
+}
+
+.no-clientes {
+    text-align: center;
+    font-size: 1.2em;
+    color: #6c757d;
+}
